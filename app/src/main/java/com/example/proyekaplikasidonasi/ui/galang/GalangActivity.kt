@@ -75,6 +75,11 @@ class GalangActivity : AppCompatActivity() {
             var data = it?.data as MutableMap<String, String>
             judul_galang.setText(data.get("name").toString())
 
+            if(data.get("status").toString() == "0"){
+                donation_end_button.visibility = View.GONE
+                donation_button.visibility = View.GONE
+            }
+
             val donasi: Double = data.get("donated_cash").toString().toDouble()
             val tDonasi: Double = data.get("target").toString().toDouble()
             val format: NumberFormat = DecimalFormat("#,###")
@@ -127,6 +132,13 @@ class GalangActivity : AppCompatActivity() {
                             "Berhasil Menyelesaikan Donasi",
                             Toast.LENGTH_SHORT
                         ).show()
+                        val currentPenggalang = db.collection("users").document(dataIntent.idPenggalang)
+                        var currentPenggalangBalance : Int = 0
+                        currentPenggalang.get().addOnSuccessListener {
+                            var data = it?.data as MutableMap<String, String>
+                            currentPenggalangBalance = data.getValue("balance").toString().toInt() + dataIntent.jumlahDonasiSaatIni.toInt()
+                            currentPenggalang.update("balance", currentPenggalangBalance.toString())
+                        }
                         val intent = Intent(this@GalangActivity, MainActivity::class.java)
                         startActivity(intent)
                     }

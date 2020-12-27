@@ -56,7 +56,23 @@ class BuatDonasiFragment : Fragment() {
             val currentDate = sdf.format(Date())
             val sdf2 = SimpleDateFormat("dd/MM/yyyy")
             val currentDate2 = sdf2.format(Date())
-            val limitDateTemp = buat_donasi_limit_date.year.toString() + buat_donasi_limit_date.month.toString() + buat_donasi_limit_date.dayOfMonth.toString()
+            var tempBulan = buat_donasi_limit_date.month + 1
+            var tempBulanStr = tempBulan.toString()
+            if(tempBulan < 10){
+                tempBulanStr = "0" + tempBulanStr
+            }
+            var tempHari = buat_donasi_limit_date.dayOfMonth
+            var tempHariStr = tempHari.toString()
+            if(tempHari < 10){
+                tempHariStr = "0" + tempHariStr
+            }
+
+            Log.d("Tanggal Debug",tempBulanStr)
+            Log.d("Tanggal Debug",tempHariStr)
+
+            val limitDateTemp = buat_donasi_limit_date.year.toString() + tempBulanStr + tempHariStr
+
+            Log.d("Tanggal Debug",limitDateTemp)
 
             try{
                 if(buat_donasi_target_donasi.text.toString().toInt() < 0){
@@ -111,7 +127,6 @@ class BuatDonasiFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if(requestCode == 111 && resultCode == Activity.RESULT_OK && data != null){
             filepath = data.data!!
             Toast.makeText(context, "Berhasil Memilih Gambar", Toast.LENGTH_SHORT).show()
